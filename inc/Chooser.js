@@ -40,7 +40,7 @@ var Chooser = {};
  * @param   {String} file_filter  The file filter pattern
  * @returns {*}
  */
-Chooser.chooseFile = function(oFile, title, file_filter) {
+Chooser.chooseFile = function( oFile, title, file_filter ) {
     if (! oFile instanceof File) var oFile = new File();
     if (! title) var title  = LANG.CHOOSE_FILE;
     if (! filter) var filter = "*";
@@ -49,4 +49,14 @@ Chooser.chooseFile = function(oFile, title, file_filter) {
         file_filter,
         false
     );
+};
+
+/**
+ * Open a file chooser to select a folder.
+ * @param {String}  title           The dialog title/message.
+ * @param {Folder}  baseFolder      The basefolder from where to start.
+ * @returns {*}
+ */
+Chooser.chooseFolder = function( title, baseFolder ) {
+    return Folder.selectDialog( title, baseFolder );
 };

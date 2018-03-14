@@ -135,3 +135,53 @@ FileSystem.read_json_file = function(filepath) {
     }
     return result;
 };
+
+/**
+ * Create a file extensions RegEx from an array of file extensions.
+ * @param {Array}       extensions  Array of file extension strings.
+ * @returns {RegExp}                Regular Expression matching the file extensions.
+ */
+FileSystem.regexFromExtensions = function(extensions) {
+    for (i=0; i<extensions.length; i++) {
+        extensions[i] = "." + extensions[i];
+    }
+    return new RegExp("/" + extensions.join('|') + "/i" );
+};
+
+/**
+ * Get all files in sub-folders.
+ * @param   {string}    srcFolder   The folder to walk.
+ * @param   {Array}     exts        An array of file extensions to match.
+ * @returns {Array}
+ */
+FileSystem.getFilesInSubfolders = function( srcFolder, exts ) {
+
+    var allFiles, theFolders, svgFileList;
+
+    var pattern = FileSystem.regexFromExtensions(exts);
+
+    if ( ! srcFolder instanceof Folder) return;
+
+    allFiles    = srcFolder.getFiles();
+    theFolders  = [];
+    svgFileList = [];
+
+    for (var x=0; x < allFiles.length; x++) {
+        if (allFiles[x] instanceof Folder) {
+            theFolders.push(allFiles[x]);
+        }
+    }
+
+    if (theFolders.length == 0) {
+        svgFileList = srcFolder.getFiles(pattern);
+    }
+    else {
+        for (var x=0; x < theFolders.length; x++) {
+            fileList = theFolders[x].getFiles(pattern);
+            for (var n = 0; n<fileList.length; n++) {
+                svgFileList.push(fileList[n]);
+            }
+        }
+    }
+    return svgFileList;
+};
