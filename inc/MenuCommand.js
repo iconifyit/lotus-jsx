@@ -12,16 +12,17 @@ var MenuCommand = function(kCommandStr, runImmediately) {
      */
     var APP = app;
 
-    /**
-     * The command string
-     * @type {string}
-     this.kCommandStr = kCommandStr;
-
      /**
      * The Command string
      * @type {string}
      */
     var command_id = kCommandStr.toLowerCase().replace(/\s/g);
+
+    /**
+     * The command string
+     * @type {string}
+     */
+    this.kCommandStr = kCommandStr;
 
     /**
      * Logger object
