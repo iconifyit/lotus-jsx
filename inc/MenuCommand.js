@@ -22,7 +22,7 @@ var MenuCommand = function(kCommandStr, runImmediately) {
      * The command string
      * @type {string}
      */
-    this.kCommandStr = kCommandStr;
+    var _kCommandStr = kCommandStr;
 
     /**
      * Logger object
@@ -2569,6 +2569,9 @@ var MenuCommand = function(kCommandStr, runImmediately) {
      * @returns {*}
      */
     this.getCommand = function(kCommandStr) {
+        if (typeof(kCommandStr) == "undefined") {
+            kCommandStr = _kCommandStr;
+        }
         if (typeof(this.commands[kCommandStr]) != "undefined") {
             return this.commands[kCommandStr];
         }
@@ -2585,7 +2588,8 @@ var MenuCommand = function(kCommandStr, runImmediately) {
      * @param kCommandStr
      */
     this.setCommand = function(kCommandStr) {
-        this.kCommandStr = kCommandStr;
+        // Filter the command through getCommand to make sure it is a valid command.
+        _kCommandStr = this.getCommand(kCommandStr);
     };
 
     /**
@@ -2593,14 +2597,29 @@ var MenuCommand = function(kCommandStr, runImmediately) {
      */
     this.run = function() {
         try {
-            APP.doCommand(this.getCommand(kCommandStr));
+            APP.doCommand(this.getCommand(_kCommandStr));
         }
         catch(e) {
-            Logger.write(e);
+            Logger.error(e);
         }
     }
-    
-    if (runImmediately) {
-        this.run();
-    }
+
+    /**
+     * Main
+     */
+    function __constructor(kCommandStr, runImmediately) {
+        // Run now.
+
+        this.setCommand(
+            this.getCommand(kCommandStr)
+        );
+
+        if (runImmediately) {
+            this.run();
+        }
+    };
+
+    __constructor(kCommandStr, runImmediately);
 };
+
+//@TODO: Need to decide what pattern to use: Prototype or Module
