@@ -22,32 +22,31 @@
  * THE SOFTWARE.
  */
 
-#target "Illustrator"
-#targetEngine "session"
+/**
+ * @type {Logger}
+ */
+var logger = new Logger($.fileName, "/var/log/");
 
-// Set the base include path.
+/**
+ *
+ * @type {{}}
+ */
+var Chooser = {};
 
-#includepath "inc/";
-
-// Include the core libraries.
-
-#include "Chooser.js"
-#include "FileSystem.js"
-#include "Iterator.js"
-#include "JSON.js"
-#include "Logger.js"
-#include "MenuCommand.js"
-#include "Progress.js"
-#include "Utils.js"
-
-
-var Lotus = {
-    Chooser     : {},
-    FileSystem  : {},
-    Iterator    : {},
-    JSON        : {},
-    Logger      : {},
-    MenuCommand : {},
-    Progress    : {},
-    Utils       : {}
+/**
+ * Open a file dialog.
+ * @param   {File} file           The file object
+ * @param   {String} title        The dialog title
+ * @param   {String} file_filter  The file filter pattern
+ * @returns {*}
+ */
+Chooser.chooseFile = function(oFile, title, file_filter) {
+    if (! oFile instanceof File) var oFile = new File();
+    if (! title) var title  = LANG.CHOOSE_FILE;
+    if (! filter) var filter = "*";
+    return oFile.openDlg(
+        title,
+        file_filter,
+        false
+    );
 };
